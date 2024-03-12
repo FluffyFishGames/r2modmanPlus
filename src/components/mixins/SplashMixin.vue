@@ -67,6 +67,8 @@ export default class SplashMixin extends Vue {
             this.getRequestItem('ThunderstoreDownload').setProgress(100);
         }
 
+        // TODO: does caching the package list on file provide any value
+        // if we can assume it's stored in the IndexedDB anyway?
         if (response) {
             ApiCacheUtils.storeLastRequest(response.data);
         } else {
@@ -75,8 +77,8 @@ export default class SplashMixin extends Vue {
         }
 
         if (response) {
-            ThunderstorePackages.handlePackageApiResponse(response);
-            await this.$store.dispatch('updateThunderstoreModList', ThunderstorePackages.PACKAGES);
+            await ThunderstorePackages.handlePackageApiResponse(this.activeGame.internalFolderName, response);
+            await this.$store.dispatch('updateThunderstoreModList');
             await this.moveToNextScreen();
         } else {
             this.heroTitle = 'Failed to get mods from Thunderstore and cache';
@@ -85,7 +87,8 @@ export default class SplashMixin extends Vue {
     }
 
     async continueOffline() {
-        ThunderstorePackages.PACKAGES = [];
+        // TODO: how to handle? Keep using the old IndexedDB values seems correct?
+        // ThunderstorePackages.PACKAGES = [];
         await this.moveToNextScreen();
     }
 

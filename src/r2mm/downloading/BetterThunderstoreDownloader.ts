@@ -11,9 +11,9 @@ import * as path from 'path';
 import FsProvider from '../../providers/generic/file/FsProvider';
 import FileWriteError from '../../model/errors/FileWriteError';
 import Profile from '../../model/Profile';
-import ThunderstorePackages from '../data/ThunderstorePackages';
 import ExportMod from '../../model/exports/ExportMod';
 import ManagerSettings from '../manager/ManagerSettings';
+import * as PackageDb from '../manager/PackageDexieStore';
 import ManifestV2 from '../../model/ManifestV2';
 import ModBridge from '../mods/ModBridge';
 import ThunderstoreDownloaderProvider from '../../providers/ror2/downloading/ThunderstoreDownloaderProvider';
@@ -203,7 +203,8 @@ export default class BetterThunderstoreDownloader extends ThunderstoreDownloader
     public async downloadImportedMods(game: Game, modList: ExportMod[],
                                        callback: (progress: number, modName: string, status: number, err: R2Error | null) => void,
                                        completedCallback: (mods: ThunderstoreCombo[]) => void) {
-        const tsMods: ThunderstoreMod[] = ThunderstorePackages.PACKAGES;
+
+        const tsMods = await PackageDb.getPackagesAsThunderstoreMods(game.internalFolderName);
         const comboList: ThunderstoreCombo[] = [];
         for (const importMod of modList) {
             for (const mod of tsMods) {

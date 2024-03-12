@@ -12,6 +12,7 @@ import R2Error from '../model/errors/R2Error';
 import ThunderstoreMod from '../model/ThunderstoreMod';
 import ThunderstorePackages from '../r2mm/data/ThunderstorePackages';
 import ManagerSettings from '../r2mm/manager/ManagerSettings';
+import * as PackageDb from '../r2mm/manager/PackageDexieStore';
 
 Vue.use(Vuex);
 
@@ -45,7 +46,14 @@ export const store = {
         _settings: null,
     },
     actions: {
-        updateThunderstoreModList({ commit }: Context, modList: ThunderstoreMod[]) {
+        // TODO: move package list related stuff to a separate module?
+        // TODO: change this to handle the whole pipeline:
+        //       API request -> IndexedDB update -> Vuex state update
+        //       Need to take into account the different approaches in
+        //       SplashMixin's foreground and UtilityMixin's background
+        //       nature.
+        async updateThunderstoreModList({commit, state}: Context) {
+            const modList = await PackageDb.getPackagesAsThunderstoreMods(state.activeGame.internalFolderName);
             commit('setThunderstoreModList', modList);
             commit('setDeprecatedMods', modList);
         },
