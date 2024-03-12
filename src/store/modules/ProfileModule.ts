@@ -8,6 +8,8 @@ import { SortDirection } from '../../model/real_enums/sort/SortDirection';
 import { SortLocalDisabledMods } from '../../model/real_enums/sort/SortLocalDisabledMods';
 import { SortNaming } from '../../model/real_enums/sort/SortNaming';
 import ThunderstoreCombo from '../../model/ThunderstoreCombo';
+import ThunderstoreMod from '../../model/ThunderstoreMod';
+import ThunderstoreVersion from '../../model/ThunderstoreVersion';
 import ConflictManagementProvider from '../../providers/generic/installing/ConflictManagementProvider';
 import ThunderstoreDownloaderProvider from '../../providers/ror2/downloading/ThunderstoreDownloaderProvider';
 import ProfileInstallerProvider from '../../providers/ror2/installing/ProfileInstallerProvider';
@@ -61,11 +63,18 @@ export default {
             return getters.activeProfile.getProfileName();
         },
 
-        modsWithUpdates(state, _getters, rootState): ThunderstoreCombo[] {
-            return ThunderstoreDownloaderProvider.instance.getLatestOfAllToUpdate(
-                state.modList,
-                rootState.thunderstoreModList
-            );
+        modsWithUpdates(state, _getters, _rootState, rootGetters): ThunderstoreCombo[] {
+            return state.modList
+                .filter(mod => !rootGetters.isLatestVersion(mod))
+                .map((mod): ThunderstoreMod | undefined => rootGetters.tsMod(mod))
+                .filter((tsMod): tsMod is ThunderstoreMod => tsMod !== undefined)
+                .map((tsMod) => {
+                    const latestVersion = tsMod.getVersions().reduce(reduceToNewestVersion);
+                    const combo = new ThunderstoreCombo();
+                    combo.setMod(tsMod);
+                    combo.setVersion(latestVersion);
+                    return combo;
+                });
         },
 
         visibleModList(state, _getters, rootState): ManifestV2[] {
@@ -244,3 +253,10 @@ export default {
         },
     },
 }
+
+const reduceToNewestVersion = (v1: ThunderstoreVersion, v2: ThunderstoreVersion) => {
+    if (v1.getVersionNumber().isNewerThan(v2.getVersionNumber())) {
+        return v1;
+    }
+    return v2;
+};

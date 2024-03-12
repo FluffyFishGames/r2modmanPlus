@@ -14,8 +14,6 @@ import Profile from '../../model/Profile';
 import ExportMod from '../../model/exports/ExportMod';
 import ManagerSettings from '../manager/ManagerSettings';
 import * as PackageDb from '../manager/PackageDexieStore';
-import ManifestV2 from '../../model/ManifestV2';
-import ModBridge from '../mods/ModBridge';
 import ThunderstoreDownloaderProvider from '../../providers/ror2/downloading/ThunderstoreDownloaderProvider';
 import ManagerInformation from '../../_managerinf/ManagerInformation';
 import Game from '../../model/game/Game';
@@ -92,26 +90,12 @@ export default class BetterThunderstoreDownloader extends ThunderstoreDownloader
         })
     }
 
-    public getLatestOfAllToUpdate(mods: ManifestV2[], allMods: ThunderstoreMod[]): ThunderstoreCombo[] {
-        return mods.filter(mod => !ModBridge.isCachedLatestVersion(mod))
-            .map(mod => ModBridge.getCachedThunderstoreModFromMod(mod))
-            .filter(value => value != undefined)
-            .map(mod => {
-                const latestVersion = mod!.getVersions().sort((a, b) => a.getVersionNumber().compareToDescending(b.getVersionNumber()))[0];
-                const combo = new ThunderstoreCombo();
-                combo.setMod(mod!);
-                combo.setVersion(latestVersion);
-                return combo;
-            })
-    }
-
-    public async downloadLatestOfAll(game: Game, mods: ManifestV2[], allMods: ThunderstoreMod[],
+    public async downloadLatestOfAll(game: Game, modsWithUpdates: ThunderstoreCombo[], allMods: ThunderstoreMod[],
                                       callback: (progress: number, modName: string, status: number, err: R2Error | null) => void,
                                       completedCallback: (modList: ThunderstoreCombo[]) => void) {
 
-        const dependenciesToUpdate: ThunderstoreCombo[] = this.getLatestOfAllToUpdate(mods, allMods);
-        const dependencies: ThunderstoreCombo[] = [...dependenciesToUpdate];
-        dependenciesToUpdate.forEach(value => {
+        const dependencies: ThunderstoreCombo[] = [...modsWithUpdates];
+        modsWithUpdates.forEach(value => {
             this.buildDependencySetUsingLatest(value.getVersion(), allMods, dependencies);
         });
 

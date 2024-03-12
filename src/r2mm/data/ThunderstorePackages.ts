@@ -2,12 +2,10 @@ import ThunderstoreMod from '../../model/ThunderstoreMod';
 import Game from '../../model/game/Game';
 import ApiResponse from '../../model/api/ApiResponse';
 import ConnectionProvider from '../../providers/generic/connection/ConnectionProvider';
-import ModBridge from '../mods/ModBridge';
 import * as PackageDb from '../manager/PackageDexieStore';
 
 export default class ThunderstorePackages {
 
-    public static PACKAGES: ThunderstoreMod[] = [];
     public static PACKAGES_MAP: Map<String, ThunderstoreMod> = new Map();
     // TODO: would IndexedDB or Vuex be more suitable place for exclusions?
     public static EXCLUSIONS: string[] = [];
@@ -33,23 +31,16 @@ export default class ThunderstorePackages {
 
         // TODO: can this be hooked into the progress bar in Splash screen?
         await PackageDb.updateFromApiResponse(gameName, packages);
+    }
 
-        // The stuff below would become obsolete...
-        ThunderstorePackages.PACKAGES = response.data
-            .map(ThunderstoreMod.parseFromThunderstoreData)
-            .filter((mod) => !ThunderstorePackages.EXCLUSIONS.includes(mod.getFullName()));
-
-        ModBridge.clearCache();
-
-        ThunderstorePackages.PACKAGES_MAP = ThunderstorePackages.PACKAGES.reduce((map, pkg) => {
+    public static getDeprecatedPackageMap(packages: ThunderstoreMod[]): Map<string, boolean> {
+        ThunderstorePackages.PACKAGES_MAP = packages.reduce((map, pkg) => {
             map.set(pkg.getFullName(), pkg);
             return map;
         }, new Map<String, ThunderstoreMod>());
-    }
 
-    public static getDeprecatedPackageMap(): Map<string, boolean> {
         const result = new Map<string, boolean>();
-        this.PACKAGES.forEach(pkg => {
+        packages.forEach(pkg => {
             this.populateDeprecatedPackageMapForModChain(pkg, result);
         });
         return result;
