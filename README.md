@@ -1,3 +1,5 @@
+This is a forked version solely to offer multiple repositories for games.
+
 # r2modman
 
 [![Discord](https://img.shields.io/discord/727304496522461185?label=r2modman%20Discord&style=for-the-badge)](https://discord.gg/jE2zWHY)
