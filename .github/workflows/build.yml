@@ -1,7 +1,11 @@
 name: Build
 
-on: [push]
-
+on: 
+  push:
+    branches:
+    - master
+  workflow_dispatch:
+  
 jobs:
   build:
     name: Build for ${{ matrix.platform }}
@@ -47,6 +51,13 @@ jobs:
         with:
           run: yarn build-${{ matrix.platform }} --publish=never
 
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist
+            
       - if: steps.build.outputs.stderr != ''
         name: Log stderr
         continue-on-error: true
