@@ -38,27 +38,28 @@ export default class ConnectionProviderImpl extends ConnectionProvider {
     }
 
     private async getPackagesFromRemote(game: Game, downloadProgressed?: DownloadProgressed) {
-		var all = [];
+		const all:ApiResponse = {data: []} as ApiResponse;
         for (var i = 0; i < game.thunderstoreUrl.length; i++)
 		{
 			const response = await makeLongRunningGetRequest(
-				game.thunderstoreUrl,
+				game.thunderstoreUrl[i],
 				{downloadProgressed}
 			)
 
-			if (isApiResonse(response)) {
-				all.concat(response);
+			if (Array.isArray(response.data)) {
+				all.data = all.data.concat(response.data);
 			}
 		}
-		if (isApiResonse(all))
+		return all;
+		/*if (isApiResonse(all))
 			return all as ApiResponse;
 
         LoggerProvider.instance.Log(
             LogSeverity.ACTION_STOPPED,
-            `Response data from API was invalid: ${JSON.stringify(response)}`
+            `Response data from API was invalid: ${JSON.stringify(all)}`
         );
 
-        throw new Error("Package response was invalid.");
+        throw new Error("Package response was invalid.");*/
     }
 
     /**
