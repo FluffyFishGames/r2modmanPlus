@@ -13,7 +13,7 @@ export default class Game {
     private readonly _settingsIdentifier: string;
     private readonly _exeName: string[];
     private readonly _dataFolderName: string;
-    private readonly _thunderstoreUrl: string;
+    private readonly _thunderstoreUrl: string[];
     private readonly _exclusionsUrl: string;
     private readonly _storePlatformMetadata: StorePlatformMetadata[];
     private readonly _gameImage: string;
@@ -27,7 +27,7 @@ export default class Game {
 
     constructor(displayName: string, internalFolderName: GAME_NAME, settingsIdentifier: string,
                 steamFolderName: string, exeName: string[], dataFolderName: string,
-                tsUrl: string, exclusionsUrl: string, platforms: StorePlatformMetadata[], gameImage: string,
+                tsUrl: string[], exclusionsUrl: string, platforms: StorePlatformMetadata[], gameImage: string,
                 displayMode: GameSelectionDisplayMode, instanceType: GameInstanceType, packageLoader: PackageLoader, additionalSearchStrings?: string[]) {
 
         this._displayName = displayName;
@@ -71,7 +71,7 @@ export default class Game {
         return this._dataFolderName;
     }
 
-    get thunderstoreUrl(): string {
+    get thunderstoreUrl(): string[] {
         return this._thunderstoreUrl;
     }
 

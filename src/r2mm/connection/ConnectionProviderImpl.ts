@@ -38,14 +38,20 @@ export default class ConnectionProviderImpl extends ConnectionProvider {
     }
 
     private async getPackagesFromRemote(game: Game, downloadProgressed?: DownloadProgressed) {
-        const response = await makeLongRunningGetRequest(
-            game.thunderstoreUrl,
-            {downloadProgressed}
-        )
+		var all = [];
+        for (var i = 0; i < game.thunderstoreUrl.length; i++)
+		{
+			const response = await makeLongRunningGetRequest(
+				game.thunderstoreUrl,
+				{downloadProgressed}
+			)
 
-        if (isApiResonse(response)) {
-            return response as ApiResponse;
-        }
+			if (isApiResonse(response)) {
+				all.concat(response);
+			}
+		}
+		if (isApiResonse(all))
+			return all as ApiResponse;
 
         LoggerProvider.instance.Log(
             LogSeverity.ACTION_STOPPED,
