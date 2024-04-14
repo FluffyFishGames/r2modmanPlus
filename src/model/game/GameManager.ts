@@ -492,9 +492,10 @@ export default class GameManager {
             "Bomb Rush Cyberfunk", "BombRushCyberfunk", "BombRushCyberfunk",
             "BombRushCyberfunk", ["Bomb Rush Cyberfunk.exe"], "Bomb Rush Cyberfunk_Data",
             ["https://thunderstore.io/c/bomb-rush-cyberfunk/api/v1/package/"], EXCLUSIONS,
-            [new StorePlatformMetadata(StorePlatform.STEAM, "1353230")], "BombRushCyberfunk.jpg",
-            GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, ["brc"]),
-
+            [
+                new StorePlatformMetadata(StorePlatform.STEAM, "1353230"),
+                new StorePlatformMetadata(StorePlatform.XBOX_GAME_PASS, "TeamReptile.BombRushCyberfunk")
+            ], "BombRushCyberfunk.jpg", GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, ["brc"]),
         new Game(
             "TouhouLostBranchOfLegend", "TouhouLostBranchOfLegend", "TouhouLostBranchOfLegend",
             "LBoL", ["LBoL.exe"], "LBoL_Data",
@@ -581,7 +582,19 @@ export default class GameManager {
             "Palworld", ["Palworld.exe"], "Pal",
             ["https://thunderstore.io/c/palworld/api/v1/package/"], EXCLUSIONS,
             [new StorePlatformMetadata(StorePlatform.STEAM, "1623730")], "Palworld.png",
-            GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.SHIMLOADER, ["palworld"])
+            GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.SHIMLOADER, ["palworld"]),
+
+        new Game("Plasma", "Plasma", "Plasma",
+            "Plasma", ["Plasma.exe"], "Plasma_Data",
+            "https://thunderstore.io/c/plasma/api/v1/package/", EXCLUSIONS,
+            [new StorePlatformMetadata(StorePlatform.STEAM, "1409160")], "Plasma.jpg",
+            GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, []),
+
+            new Game("Content Warning", "ContentWarning", "ContentWarning",
+            "Content Warning", ["Content Warning.exe"], "ContentWarning_Data",
+            "https://thunderstore.io/c/content-warning/api/v1/package/", EXCLUSIONS,
+            [new StorePlatformMetadata(StorePlatform.STEAM, "2881650")], "ContentWarning.png",
+            GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, []),
     ];
 
     static get activeGame(): Game {
