@@ -586,13 +586,13 @@ export default class GameManager {
 
         new Game("Plasma", "Plasma", "Plasma",
             "Plasma", ["Plasma.exe"], "Plasma_Data",
-            "https://thunderstore.io/c/plasma/api/v1/package/", EXCLUSIONS,
+            ["https://thunderstore.io/c/plasma/api/v1/package/"], EXCLUSIONS,
             [new StorePlatformMetadata(StorePlatform.STEAM, "1409160")], "Plasma.jpg",
             GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, []),
 
-            new Game("Content Warning", "ContentWarning", "ContentWarning",
+        new Game("Content Warning", "ContentWarning", "ContentWarning",
             "Content Warning", ["Content Warning.exe"], "ContentWarning_Data",
-            "https://thunderstore.io/c/content-warning/api/v1/package/", EXCLUSIONS,
+            ["https://thunderstore.io/c/content-warning/api/v1/package/"], EXCLUSIONS,
             [new StorePlatformMetadata(StorePlatform.STEAM, "2881650")], "ContentWarning.png",
             GameSelectionDisplayMode.VISIBLE, GameInstanceType.GAME, PackageLoader.BEPINEX, []),
     ];
